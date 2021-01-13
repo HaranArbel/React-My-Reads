@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import BookShelfChanger from "./BookShelfChanger";
-import {update} from "../BooksAPI";
 
 const Book = ({book, onChangeShelf}) => {
 
@@ -19,7 +18,7 @@ const Book = ({book, onChangeShelf}) => {
                 <div className="book-cover" style={{
                     width: 128,
                     height: 193,
-                    backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail || ""})`
+                    backgroundImage: `url(${(book.imageLinks && book.imageLinks.thumbnail) || ""})`
                 }}></div>
                 <BookShelfChanger shelf={bookShelf} handleOnChange={updateBookShelf}/>
             </div>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import Bookshelf from "./Bookshelf";
-import {getAll, search} from "../BooksAPI";
+import {search} from "../BooksAPI";
 
 const SearchPage = ({books, onChangeShelf}) => {
 
@@ -16,6 +16,7 @@ const SearchPage = ({books, onChangeShelf}) => {
                         return
                     }
                     const adjustedBooks = searchResults.map(searchResult => {
+                        searchResult.shelf = "none"
                         books.forEach(book => {
                             if (book.id === searchResult.id){
                                 searchResult.shelf = book.shelf
