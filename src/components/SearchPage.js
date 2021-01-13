@@ -1,19 +1,38 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import Bookshelf from "./Bookshelf";
-import {search} from "../BooksAPI";
+import {getAll, search} from "../BooksAPI";
 
-const SearchPage = () => {
+const SearchPage = ({books, onChangeShelf}) => {
 
-    const [query, setQuery] = useState('')
-    const [books, setBooks] = useState([])
+        const [query, setQuery] = useState('')
+        const [searchBooks, setSearchBooks] = useState([])
 
-    useEffect(() => {
-        search(query).then(books => setBooks(books))
-    }, [query])
+        useEffect(() => {
+            if (query !== '') {
+                search(query).then(searchResults => {
+                    if (!searchResults || searchResults.error) {
+                        setSearchBooks([])
+                        return
+                    }
+                    const adjustedBooks = searchResults.map(searchResult => {
+                        books.forEach(book => {
+                            if (book.id === searchResult.id){
+                                searchResult.shelf = book.shelf
+                            }
+                        })
+                        return searchResult
+                    })
+                    // finally, setState
+                    setSearchBooks(adjustedBooks)
+                })
+            } else {
+                setSearchBooks([])
 
-    return (
-        <div className="search-books">
+            }
+        }, [query])
+
+        return (
             <div className="search-books">
                 <div className="search-books-bar">
                     <Link to='/' className="close-search">search books</Link>
@@ -34,15 +53,15 @@ const SearchPage = () => {
                         />
                     </div>
                 </div>
-                {(books && books.length !== 0) ? <Bookshelf shelf={"Search Results"} books={books}/> : null}
                 <div className="search-books-results">
-                    <ol className="books-grid">
-
-                    </ol>
+                    {(books && books.length !== 0) && (
+                        <Bookshelf shelf={"Search Books Results"}
+                                   books={searchBooks}
+                                   onChangeShelf={onChangeShelf}/>)}
                 </div>
             </div>
-        </div>
-    );
-};
+        );
+    }
+;
 
 export default SearchPage;

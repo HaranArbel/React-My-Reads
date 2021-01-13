@@ -2,13 +2,15 @@ import React, {useState} from "react";
 import BookShelfChanger from "./BookShelfChanger";
 import {update} from "../BooksAPI";
 
-const Book = ({book}) => {
+const Book = ({book, onChangeShelf}) => {
 
     const [bookShelf, setBookShelf] = useState(book.shelf)
 
-    const updateBook = (event) => {
-        setBookShelf(event.target.value)
-        update(book, event.target.value)
+    const updateBookShelf = (event) => {
+        const shelf = event.target.value
+        setBookShelf(shelf)
+        onChangeShelf(book, shelf)
+        // update(book, event.target.value)
     }
 
     return (
@@ -19,7 +21,7 @@ const Book = ({book}) => {
                     height: 193,
                     backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail || ""})`
                 }}></div>
-                <BookShelfChanger shelf={bookShelf} handleOnChange={updateBook}/>
+                <BookShelfChanger shelf={bookShelf} handleOnChange={updateBookShelf}/>
             </div>
             <div className="book-title">{book.title}</div>
             <div className="book-authors">{book.authors}</div>

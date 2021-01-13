@@ -1,15 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import {Link} from 'react-router-dom'
 import Bookshelf from "./Bookshelf";
-import {getAll} from "../BooksAPI";
 
-const MainPage = () => {
-
-    const [books, setBooks] = useState([])
-
-    useEffect(() => {
-        getAll().then(books => setBooks(books))
-    }, [books])
+const MainPage = ({books, onChangeShelf}) => {
 
     return (
         <div className="MainPage">
@@ -20,16 +13,19 @@ const MainPage = () => {
                 <div className="list-books-content">
                     <div>
                         <Bookshelf shelf={"Currently Reading"}
-                                   books={books.filter(book => book.shelf === "currentlyReading")}/>
+                                   books={books.filter(book => book.shelf === "currentlyReading")}
+                                    onChangeShelf={onChangeShelf}/>
                         <Bookshelf shelf={"Want to Read"}
-                                   books={books.filter(book => book.shelf === "wantToRead")}/>
+                                   books={books.filter(book => book.shelf === "wantToRead")}
+                                   onChangeShelf={onChangeShelf}/>
                         <Bookshelf shelf={"Read"}
-                                   books={books.filter(book => book.shelf === "read")}/>
+                                   books={books.filter(book => book.shelf === "read")}
+                                   onChangeShelf={onChangeShelf}/>
                     </div>
                 </div>
-                <div className="open-search">
-                    <Link to='/search'>Add a book</Link>
-                </div>
+                <Link to='/search' className="open-search">
+                    <button type="button"/>
+                </Link>
             </div>
         </div>
     );
